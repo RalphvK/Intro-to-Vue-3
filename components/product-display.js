@@ -3,6 +3,10 @@ app.component('product-display', {
         premium: {
             type: Boolean,
             required: true
+        },
+        cart: {
+            type: Array,
+            required: false
         }
     },
     template:
@@ -26,8 +30,10 @@ app.component('product-display', {
                     :style="{ backgroundColor: variant.color }">
                 </div>
 
-                <button class="button" :class="{ disabledButton: !inStock }" :disabled="!inStock" v-on:click="addToCart">Add
-                    to Cart</button>
+                <button class="button" :class="{ disabledButton: !inStock }" :disabled="!inStock" @click="addToCart">
+                    Add to Cart 
+                    <span v-show="variantCartQuantity > 0">({{ variantCartQuantity }})</span>
+                </button>
             </div>
         </div>
     </div>
@@ -36,7 +42,7 @@ app.component('product-display', {
         return {
             product: 'Socks',
             brand: 'Vue Mastery',
-            selectedVariant: 0,
+            selectedVariantId: 0,
             details: ['50% cotton', '30% wool', '20% polyester'],
             variants: [
               { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
@@ -46,21 +52,24 @@ app.component('product-display', {
     },
     methods: {
         addToCart() {
-            this.cart += 1
+            this.$emit('add-to-cart', this.variants[this.selectedVariantId].id);
         },
         updateVariant(index) {
-            this.selectedVariant = index
+            this.selectedVariantId = index
         }
     },
     computed: {
+        selectedVariant() {
+            return this.variants[this.selectedVariantId];
+        },
         title() {
             return this.brand + ' ' + this.product
         },
         image() {
-            return this.variants[this.selectedVariant].image
+            return this.variants[this.selectedVariantId].image
         },
         inStock() {
-            return this.variants[this.selectedVariant].image
+            return this.variants[this.selectedVariantId].quantity > 0;
         },
         shipping() {
             if (this.premium) {
@@ -68,6 +77,18 @@ app.component('product-display', {
             } else {
                 return 2.99;
             }
+        },
+        variantCartQuantity() {
+            if (typeof this.cart == 'undefined' || !Array.isArray(this.cart)) { return null; }
+            var occurrences = 0;
+            this.cart.forEach(element => {
+                console.log(element, this.selectedVariant.id)
+                if (element == this.selectedVariant.id) {
+                    occurrences++;
+                }
+            });
+            console.log(occurrences);
+            return occurrences;
         }
     }
 });
