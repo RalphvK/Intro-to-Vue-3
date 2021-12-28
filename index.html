@@ -12,9 +12,11 @@
         <div id="app">
             <div class="nav-bar"></div>
 
-            <div class="cart">Cart({{ cart.length }})</div>
+            <div class="cart">Cart ({{ cartQuantity }})</div>
 
-            <product-display :premium="premium" :cart="cart" @add-to-cart="updateCart"></product-display>
+            <product-display :premium="premium" :cart="cart" @add-to-cart="modifyCartItem"></product-display>
+
+            <!-- <cart :cart="cart"></cart> -->
         </div>
 
         <!-- Import App -->
