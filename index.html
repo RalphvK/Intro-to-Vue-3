@@ -12,11 +12,12 @@
         <div id="app">
             <div class="nav-bar"></div>
 
-            <div class="cart">Cart ({{ cartQuantity }})</div>
+            <div class="cart">
+                Cart ({{ cartQuantity }})
+                <cart :cart="cart"></cart>
+            </div>
 
             <product-display :premium="premium" :cart="cart" @add-to-cart="modifyCartItem"></product-display>
-
-            <!-- <cart :cart="cart"></cart> -->
         </div>
 
         <!-- Import App -->
@@ -25,6 +26,7 @@
         <!-- Import Components -->
         <script src="./components/product-display.js"></script>
         <script src="./components/product-details.js"></script>
+        <script src="./components/cart.js"></script>
 
         <!-- Mount App -->
         <script>
